@@ -1,0 +1,6 @@
+1. privilege: ansible_ssh_user as normal user, but sudo as root only when root privilege required !!! This is quite a trouble.
+2. role: sun-jdk  deploy sun-jdk in $HOME/lek
+   1). unpack jdk.gz
+   2). update ~/.profile
+3. role: logstash 
+    install logstash using APT or YUM

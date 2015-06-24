@@ -2,3 +2,5 @@
 # defaults file for common-env
 # default sudoers file
 sudoers: /etc/sudoers
+keyfile: "{{lookup('env','HOME')}}/.ssh/id_rsa.pub"
+user: "{{lookup('env','USER')}}"

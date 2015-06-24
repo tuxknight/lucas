@@ -1,7 +1,7 @@
-Role Name
-=========
+common-env
+============
 
-A brief description of the role goes here.
+Disable requiretty in /etc/sudoers
 
 Requirements
 ------------

@@ -1,9 +1,3 @@
 ---
-# tasks file for common-env
-- name: disable 'requiretty' in /etc/sudoers
-  lineinfile:
-    dest: "{{sudoers}}"
-    state: absent
-    regexp: "^Defaults\\s*requiretty"
-    backup: yes
-    validate: "visudo -cf %s"
+#- include: authorized-keys.yml
+- include: disable-requretty.yml  

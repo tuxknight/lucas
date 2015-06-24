@@ -1,0 +1,9 @@
+---
+## disable requiretty
+- name: disable 'requiretty' in /etc/sudoers
+  lineinfile:
+    dest: "{{sudoers}}"
+    state: absent
+    regexp: "^Defaults\\s*requiretty"
+    backup: yes
+    validate: "visudo -cf %s"

@@ -1,2 +1,9 @@
+[remote]
+10.32.105.213 ansible_ssh_user=elc
+[lek]
+10.32.105.213 ansible_ssh_user=root
+10.13.181.85 ansible_ssh_user=root
+10.32.131.107 ansible_ssh_user=root
+10.32.105.214 ansible_ssh_user=root
 [localhost]
 127.0.0.1 ansible_ssh_user=root

@@ -1,7 +1,8 @@
 ---
-- hosts: localhost
+- hosts: lek
   remote_user: root
-  gather_facts: false
+  gather_facts: true
   
   roles: 
-    - common-env
+    - {role: common-env}
+
