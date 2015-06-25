@@ -1,0 +1,8 @@
+---
+# defaults file for elasticsearch
+base_home: "{{ansible_env.HOME}}/lek"
+es_home: "{{base_home}}/elasticsearch-1.6.0"
+es_tarball: "elasticsearch-1.6.0.tar.gz"
+es_config: "elasticsearch.yml"
+es_logging_config: "logging.yml"
+env_profile: "{{ansible_env.HOME}}/.profile"

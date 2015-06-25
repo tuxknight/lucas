@@ -1,0 +1,33 @@
+---
+# tasks file for elasticsearch
+- name: create directory
+  file: path="{{base_home}}" state=directory
+
+- name: unpack tarball to remote node
+  unarchive: src="{{es_tarball}}" dest="{{base_home}}"
+
+- name: check if unpack module worked
+  stat: path="{{es_home}}"
+  ignore_errors: true
+  register: unpack_check
+
+- fail: msg="unpack kibana failed!"
+  when: unpack_check.stat.exists == false
+
+- name: update ENV
+  lineinfile:
+    dest: "{{env_profile}}"
+    line: "export PATH={{es_home}}/bin:$PATH"
+    state: present
+
+- name: remove default config/elasticsearch.yml
+  file: path="{{es_home}}/config/{{item}}" state=absent
+  with_items:
+    - "{{es_logging_config}}"
+    - "{{es_config}}"
+
+- name: update configuration file
+  template: src="{{item}}.j2" dest="{{es_home}}/config/{{item}}"
+  with_items:
+    - "{{es_logging_config}}"
+    - "{{es_config}}"

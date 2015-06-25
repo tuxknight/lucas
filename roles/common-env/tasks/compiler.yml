@@ -1,0 +1,6 @@
+---
+- debug: msg="{{apache}}"
+#- name: install compilers
+#  action: "{{pkg.mgr}} {{pkg.name}}={{item}} state=installed"
+#  with_items:
+#    - "{{packages}}"

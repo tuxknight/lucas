@@ -1,8 +1,41 @@
 ---
-- hosts: lek
-  remote_user: root
+#- name: common settings
+#  hosts: lek
+#  gather_facts: true
+#  sudo: yes
+#  
+#  roles: 
+#    - {role: common-env}
+#    - {role: sun-jdk}
+
+#- name: setup jdk
+#  hosts: logstash
+#  gather_facts: true
+#  
+#  roles: 
+#    - {role: sun-jdk}
+#- name: setup logstash
+#  hosts: logstash
+#  gather_facts: true
+#  
+#  roles: 
+#    - {role: logstash}
+#- name: setup kibana
+#  hosts: els
+#  gather_facts: true
+#  
+#  roles: 
+#    - {role: kibana}
+#- name: setup elasticsearch-singlenode
+#  hosts: els
+#  gather_facts: true
+#  
+#  roles: 
+#    - {role: elasticsearch}
+- name: common
+  hosts: localhost
   gather_facts: true
+  sudo: yes
   
   roles: 
     - {role: common-env}
-

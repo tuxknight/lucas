@@ -1,0 +1,5 @@
+./roles/elasticsearch/files/elasticsearch-1.6.0.tar.gz
+./roles/logstash/files/logstash-1.5.0.tar.gz
+./roles/sun-jdk/files/jdk-8u45-linux-x64.tar.gz
+./roles/kibana/files/kibana-4.1.0-linux-x64.tar.gz
+./roles/redis/files/redis-3.0.2.tar.gz

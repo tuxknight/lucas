@@ -1,0 +1,25 @@
+---
+# tasks file for sun-jdk
+- name: create directory
+  file: path="{{base_home}}" state=directory
+
+- name: unpack tarball to remote node
+  unarchive: src="{{jdk_tarball}}" dest="{{base_home}}"
+
+- name: check if unpack module worked
+  stat: path="{{java_home}}"
+  ignore_errors: true
+  register: unpack_check
+
+- fail: msg="unpack jdk failed!"
+  when: unpack_check.stat.exists == false
+
+- name: update ENV
+  lineinfile:
+    dest: "{{env_profile}}"
+    line: "{{item}}"
+    state: present
+  with_items:
+    - "export PATH={{java_home}}/bin:$PATH"
+    - "export JAVA_HOME={{java_home}}"
+    - "export CLASSPATH=.:{{java_home}}/lib"

@@ -1,2 +1,2 @@
 ---
-pass: dangerous
+base_home: "{{ansible_env.HOME}}/lek"

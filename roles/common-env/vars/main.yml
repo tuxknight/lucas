@@ -1,2 +1,3 @@
 ---
-# vars file for common-env
+# vars file for httpd
+include: "{{ansible_os_family}}.yml"
