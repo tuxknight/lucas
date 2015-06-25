@@ -1,0 +1,4 @@
+common-env  gcc && build-essentials
+redis make configuration init_script
+logstash configuration init_script
+elasticsearch configuration init_script
