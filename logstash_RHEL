@@ -15,6 +15,8 @@
 # Description:        Starts Logstash as a daemon.
 ### END INIT INFO
 
+#{{ansible_managed}}
+
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 export PATH
 
