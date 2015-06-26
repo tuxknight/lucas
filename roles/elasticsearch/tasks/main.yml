@@ -31,3 +31,14 @@
   with_items:
     - "{{es_logging_config}}"
     - "{{es_config}}"
+
+- name: install elasticsearch service
+  template: src="{{item.src}}" dest="{{item.dest}}" mode="{{item.mode}}"
+  with_items:
+    - {src: "{{es_srvname}}.j2", dest: "/etc/init.d/{{es_srvname}}", mode: 755}
+    - {src: "default.j2", dest: "/etc/default/{{es_srvname}}", mode: 644}
+  sudo: yes
+  sudo_user: root
+  notify:
+    - enable elasticsearch
+    - restart elasticsearch

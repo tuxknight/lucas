@@ -14,12 +14,16 @@
 - fail: msg="unpack jdk failed!"
   when: unpack_check.stat.exists == false
 
+- name: create symbolic to /bin/java
+  file: src="{{java_home}}/bin/java" dest=/bin/java state=link
+  sudo: yes
+  sudo_user: root
+
 - name: update ENV
   lineinfile:
-    dest: "{{env_profile}}"
-    line: "{{item}}"
+    dest: "{{item[0]}}"
+    line: "{{item[1]}}"
     state: present
-  with_items:
-    - "export PATH={{java_home}}/bin:$PATH"
-    - "export JAVA_HOME={{java_home}}"
-    - "export CLASSPATH=.:{{java_home}}/lib"
+  with_nested:
+    - ["/etc/profile", "{{ansible_env.HOME}}/.profile"]
+    - ["export PATH={{java_home}}/bin:$PATH", "export JAVA_HOME={{java_home}}", "export CLASSPATH=.:{{java_home}}/lib"]

@@ -1,6 +1,13 @@
 ---
-- debug: msg="{{apache}}"
-#- name: install compilers
-#  action: "{{pkg.mgr}} {{pkg.name}}={{item}} state=installed"
-#  with_items:
-#    - "{{packages}}"
+- name: install packages for Debian-based OS
+  apt: pkg="{{item}}" state=present
+  with_items:
+    - build-essential
+  when: ansible_os_family == "Debian"
+
+- name: install packages for RedHat-based OS
+  yum: name="{{item}}" state=present
+  with_items:
+    - gcc
+    - glibc
+  when: ansible_os_family == "RedHat"

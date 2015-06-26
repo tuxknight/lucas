@@ -4,7 +4,7 @@ base_home: "{{ansible_env.HOME}}/lek"
 redis_home: "{{base_home}}/redis-3.0.2"
 redis_tarball: "redis-3.0.2.tar.gz"
 redis_config: "redis_{{redis_port}}.conf"
-redis_init: "redis_{{redis_port}}"
+redis_init: "redis_{{redis_port}}_init"
 redis_port: 6379
+redis_srvname: "redis_{{redis_port}}"
 env_profile: "{{ansible_env.HOME}}/.profile"
-

@@ -1,9 +1,5 @@
 ---
 # tasks file for redis
-# make PREFIX=/home/susu/lek/redis-2.6.16/
-# make PREFIX=/home/susu/lek/redis-2.6.16/ install
-# cd utils
-# ./install_server
 - name: create directory
   file: path="{{base_home}}" state=directory
 
@@ -11,7 +7,7 @@
   unarchive: src="{{redis_tarball}}" dest="{{base_home}}"
 
 - name: check if unpack module worked
-  stat: path="{{logstash_home}}"
+  stat: path="{{redis_home}}"
   ignore_errors: true
   register: unpack_check
 
@@ -24,12 +20,24 @@
     line: "export PATH={{redis_home}}/bin:$PATH"
     state: present
 
-- name: compile srouce code
-  command: "make PREFIX={{redis_home}} install"
-  register: compile_result
+- name: compile source code
+  shell: "cd {{redis_home}} && make && make PREFIX={{redis_home}} install"
 
-- name: configuraiont file
-  template: src="{{item.src}}" dest="{{item.dest}}"
+- name: check if redis compilation succeed 
+  stat: path="{{redis_home}}/bin/redis-server"
+  ignore_errors: true
+  register: redis_exec_file
+
+- fail: msg="compile redis failed!"
+  when: redis_exec_file.stat.exists == false
+
+- name: configuration file
+  template: src={{item.src}} dest={{item.dest}} mode={{item.mode}}
   with_items:
-    - {src:"{{redis_config}}.j2", dest:"/etc/{{redis_config}}"}
-    - {src:"{{redis_init}}.j2", dest:"/etc/init.d/{{redis_init}}"}
+    - {src: "{{redis_config}}.j2", dest: "/etc/{{redis_config}}", mode: 644}
+    - {src: "{{redis_init}}.j2", dest: "/etc/init.d/redis_{{redis_port}}", mode: 755}
+  sudo: yes
+  sudo_user: root
+  notify:
+    - enable redis
+    - restart redis

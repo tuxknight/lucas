@@ -3,6 +3,11 @@
 - name: create directory
   file: path="{{base_home}}" state=directory
 
+- name: create directory
+  file: path=/etc/logstash/conf.d state=directory
+  sudo: yes
+  sudo_user: root
+
 - name: unpack tarball to remote node
   unarchive: src="{{logstash_tarball}}" dest="{{base_home}}"
 
@@ -19,3 +24,14 @@
     dest: "{{env_profile}}"
     line: "export PATH={{logstash_home}}/bin:$PATH"
     state: present
+
+- name: create init-script and make logstash to be a service
+  template: src={{item.src}} dest={{item.dest}} mode={{item.mode}}
+  with_items:
+    - {src: "{{logstash_srvname}}.j2", dest: "/etc/init.d/{{logstash_srvname}}", mode: 755}
+    - {src: "default.j2", dest: "/etc/default/{{logstash_srvname}}", mode: 644}
+  sudo: yes
+  sudo_user: root
+  notify:
+    - enable logstash
+    - restart logstash

@@ -1,5 +1,6 @@
 ---
 # defaults file for logstash
+logstash_srvname: "logstash"
 base_home: "{{ansible_env.HOME}}/lek"
 logstash_tarball: "logstash-1.5.0.tar.gz"
 logstash_home: "{{base_home}}/logstash-1.5.0"

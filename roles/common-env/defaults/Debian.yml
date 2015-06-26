@@ -1,0 +1,7 @@
+---
+pkgmgr:
+    pkg: apt
+    name: pkg
+    state: state
+packages:
+    - build-essential

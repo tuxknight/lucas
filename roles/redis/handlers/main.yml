@@ -1,2 +1,10 @@
 ---
 # handlers file for redis
+- name: restart redis
+  service: name="{{redis_srvname}}" state=restarted
+  sudo: yes
+  sudo_user: root
+- name: enable redis
+  service: name="{{redis_srvname}}" state=started enabled=yes
+  sudo: yes
+  sudo_user: root

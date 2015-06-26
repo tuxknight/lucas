@@ -1,0 +1,9 @@
+---
+- name: setup redis
+  hosts: localhost
+  gather_facts: true
+  roles: 
+    - {role: redis}
+    - {role: logstash}
+    - {role: elasticsearch}
+    - {role: kibana}

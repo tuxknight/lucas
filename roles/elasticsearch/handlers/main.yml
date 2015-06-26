@@ -1,2 +1,10 @@
 ---
 # handlers file for elasticsearch
+- name: restart elasticsearch
+  service: name="{{es_srvname}}" state=restarted
+  sudo: yes
+  sudo_user: root
+- name: enable elasticsearch
+  service: name="{{es_srvname}}" state=started enabled=yes
+  sudo: yes
+  sudo_user: root

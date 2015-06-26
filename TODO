@@ -1,4 +1,4 @@
-common-env  gcc && build-essentials
-redis make configuration init_script
-logstash configuration init_script
-elasticsearch configuration init_script
+1. limit the usage of root privilege
+2. kibana as a service
+3. test all over again
+4. create every thing that need root privilege

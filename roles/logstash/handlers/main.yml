@@ -1,2 +1,10 @@
 ---
 # handlers file for logstash
+- name: restart logstash
+  service: name="{{logstash_srvname}}" state=restarted
+  sudo: yes
+  sudo_user: root
+- name: enable logstash
+  service: name="{{logstash_srvname}}" enabled=yes state=started
+  sudo: yes
+  sudo_user: root

@@ -4,7 +4,6 @@
   remote_user: root
 
   vars_files:
-    - "a.yml"
     - "{{ansible_os_family}}.yml"
   tasks:
     - name: install packages
