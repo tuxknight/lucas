@@ -7,3 +7,5 @@
     regexp: "^Defaults\\s*requiretty"
     backup: yes
     validate: "visudo -cf %s"
+  sudo: yes
+  sudo_user: root

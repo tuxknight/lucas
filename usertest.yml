@@ -1,27 +1,6 @@
 ---
-#- hosts: remote
-- hosts: logstash
-  remote_user: root
+- hosts: localhost
   gather_facts: false
-  vars:
-    d:
-      A: 1
-      D: 4
-      B: 2
-    n: 342.3927
 
-  tasks:
-    - shell: whoami
-#     become: true
-#     become_user: root
-#      become_pass: dangerous
-#     register: i
-#   - assert:
-#       that:
-#           i.stdout == 'root'
-#   - debug: msg="{{i.stdout|center(width=30)}}"
-#   - debug: msg="{{nothing|default('It\'s nothing')}}"
-#   - debug: msg="{{d|dictsort|first|pprint}}"
-#   - debug: msg="{{nothing|default('It\'s nothing')|indent(6, true)}}"
-#   - debug: msg="{{d|map('dictsort')|upper}}"
-#   - debug: msg="{{n|round(precision=1)}}"
+  roles:
+   - common-env

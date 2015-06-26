@@ -1,2 +1,4 @@
 ---
 # vars file for common-env
+vars_files:
+  - "{{ansible_os_family}}.yml"

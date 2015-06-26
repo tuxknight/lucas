@@ -1,0 +1,8 @@
+---
+pkgmgr:
+    pkg: yum
+    name: name
+    state: state
+packages:
+    - gcc
+    - glibc

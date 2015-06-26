@@ -2,7 +2,6 @@
 - name: common settings
   hosts: lek
   gather_facts: true
-  sudo: yes
   roles: 
     - {role: common-env}
     - {role: sun-jdk}
