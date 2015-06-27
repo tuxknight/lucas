@@ -1,13 +1,8 @@
 ---
-- name: install packages for Debian-based OS
-  apt: pkg="{{item}}" state=present
+- include_vars: "{{ ansible_os_family }}.yml"
+- name: install cc & gcc packages 
+  action: "{{pkgmgr.pkg}} {{pkgmgr.name}}={{item}} {{pkgmgr.state}}=present"
+  #action: yum name={{item}} state=present
+  #action: apt pkg={{item}} state=present
   with_items:
-    - build-essential
-  when: ansible_os_family == "Debian"
-
-- name: install packages for RedHat-based OS
-  yum: name="{{item}}" state=present
-  with_items:
-    - gcc
-    - glibc
-  when: ansible_os_family == "RedHat"
+    packages
