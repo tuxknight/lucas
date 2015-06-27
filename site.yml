@@ -6,16 +6,22 @@
     - {role: common-env}
     - {role: sun-jdk}
 
+- name: setup redis
+  hosts: redis
+  gather_facts: true
+  roles: 
+    - {role: redis}
+      
+- name: setup kibana and elasticsearch
+  hosts: els
+  gather_facts: true
+  roles: 
+    - {role: elasticsearch}
+    - {role: kibana}
+
+# when redis and elasticsearch are ready
 - name: setup logstash
   hosts: logstash
   gather_facts: true
   roles: 
     - {role: logstash}
-      
-- name: setup kibana and elasticsearch
-  hosts: els
-  gather_facts: true
-  
-  roles: 
-    - {role: kibana}
-    - {role: elasticsearch}

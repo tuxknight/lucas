@@ -1,0 +1,3 @@
+---
+default_syslog: [ "/var/log/messages" ]
+default_authlog: [ "/var/log/secure" ]

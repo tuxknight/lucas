@@ -1,5 +1,8 @@
 ---
 # tasks file for logstash
+# include os-specified variables
+- include_vars: "{{ ansible_os_family }}.yml" 
+
 - name: create directory
   file: path="{{base_home}}" state=directory
 
@@ -10,6 +13,7 @@
 
 - name: unpack tarball to remote node
   unarchive: src="{{logstash_tarball}}" dest="{{base_home}}"
+  ignore_errors: true
 
 - name: check if unpack module worked
   stat: path="{{logstash_home}}"
@@ -25,11 +29,27 @@
     line: "export PATH={{logstash_home}}/bin:$PATH"
     state: present
 
-- name: create init-script and make logstash to be a service
+- name: create conf directory
+  file: path="/etc/logstash/conf.d/" state=directory
+  ignore_errors: true
+  sudo: yes
+  sudo_user: root
+
+- name: check conf directory
+  stat: path="/etc/logstash/conf.d/"
+  register: dir_check
+  ignore_errors: true
+
+- fail: msg="mkdir /etc/logstash/conf.d/ failed!"
+  when: dir_check.stat.exists == false
+
+- name: create init-script and do the configuration stuff
   template: src={{item.src}} dest={{item.dest}} mode={{item.mode}}
   with_items:
+    - {src: "logstash.conf.j2", dest: "/etc/logstash/conf.d/", mode: 644}
     - {src: "{{logstash_srvname}}.j2", dest: "/etc/init.d/{{logstash_srvname}}", mode: 755}
     - {src: "default.j2", dest: "/etc/default/{{logstash_srvname}}", mode: 644}
+    - 
   sudo: yes
   sudo_user: root
   notify:

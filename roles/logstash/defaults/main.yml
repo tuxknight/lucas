@@ -5,3 +5,26 @@ base_home: "{{ansible_env.HOME}}/lek"
 logstash_tarball: "logstash-1.5.0.tar.gz"
 logstash_home: "{{base_home}}/logstash-1.5.0"
 env_profile: "{{ansible_env.HOME}}/.profile"
+
+# must be a shipper or an indexer
+logstash_whoami: "shipper"
+
+# (addr:port) args for input plugin redis
+# value type is string which stands for 
+# a single redis server 
+read_from_redis_addr: "127.0.0.1"
+read_from_redis_port: 6379
+
+# (addr:port) args for output plugin redis
+# value type is array
+# "127.0.0.1" or ["127.0.0.1", "127.0.0.2"] 
+# or ["127.0.0.1:6380", "127.0.0.1"]
+write_to_redis_addr: "127.0.0.1"
+write_to_redis_port: 6379
+
+redis_key: "logstash-*"
+
+# elasticsearch config
+# "127.0.0.1" or ["127.0.0.1", "127.0.0.2"] 
+# or ["127.0.0.1:9300", "127.0.0.1"]
+els_addr: "127.0.0.1"
