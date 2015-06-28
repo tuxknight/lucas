@@ -1,2 +1,2 @@
 ---
-elasticsearch_url: "10.13.181.85"
+elasticsearch_url: "http://10.13.181.85:9200"

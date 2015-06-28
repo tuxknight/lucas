@@ -5,5 +5,5 @@ kibana_home: "{{base_home}}/kibana-4.1.0-linux-x64"
 kibana_tarball: "kibana-4.1.0-linux-x64.tar.gz"
 env_profile: "{{ansible_env.HOME}}/.profile"
 kibana_config: "kibana.yml"
-elasticsearch: "http://127.0.0.1:9200"
+elasticsearch_url: "http://127.0.0.1:9200"
 kibana_port: 5601
