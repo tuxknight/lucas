@@ -1,5 +1,5 @@
 ---
 logstash_whoami: "indexer"
-read_from_redis_addr: "192.168.10.103"
+read_from_redis_addr: "10.32.105.213"
 read_from_redis_port: "6379"
-els_addr: "127.0.0.1"
+els_addr: "10.13.181.85"

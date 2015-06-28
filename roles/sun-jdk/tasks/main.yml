@@ -28,4 +28,4 @@
     - ["/etc/profile", "{{ansible_env.HOME}}/.profile"]
     - ["export PATH={{java_home}}/bin:$PATH", "export JAVA_HOME={{java_home}}", "export CLASSPATH=.:{{java_home}}/lib"]
   sudo: yes
-  sudo_user: rot
+  sudo_user: root
