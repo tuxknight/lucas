@@ -46,7 +46,7 @@
 - name: create init-script and do the configuration stuff
   template: src={{item.src}} dest={{item.dest}} mode={{item.mode}}
   with_items:
-    - {src: "logstash.conf.j2", dest: "/etc/logstash/conf.d/", mode: 644}
+    - {src: "logstash.conf.j2", dest: "/etc/logstash/conf.d/logstash.conf", mode: 644}
     - {src: "{{logstash_srvname}}.j2", dest: "/etc/init.d/{{logstash_srvname}}", mode: 755}
     - {src: "default.j2", dest: "/etc/default/{{logstash_srvname}}", mode: 644}
   sudo: yes

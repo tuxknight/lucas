@@ -27,8 +27,10 @@ fi
 name={{logstash_srvname}}
 pidfile="/var/run/$name.pid"
 
-LS_USER={{ansible_env.USER}}
-LS_GROUP={{ansible_env.USER}}
+#LS_USER={{ansible_env.USER}}
+#LS_GROUP={{ansible_env.USER}}
+LS_USER=root
+LS_GROUP=root
 LS_HOME=/var/lib/logstash
 LS_HEAP_SIZE="500m"
 LS_LOG_DIR={{logstash_home}}
