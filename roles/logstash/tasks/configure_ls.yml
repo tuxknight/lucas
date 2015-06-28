@@ -1,0 +1,8 @@
+---
+# configure logstash by adding conf files into /etc/logstash/conf.d
+- name: copy files to /etc/logstash/conf.d
+  copy: src="{{item}}" dest="/etc/logstash/conf.d" mode=644
+  with_items:
+    conf_files
+  notify:
+    - restart logstash
