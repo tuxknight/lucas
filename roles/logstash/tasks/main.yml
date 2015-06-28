@@ -49,7 +49,6 @@
     - {src: "logstash.conf.j2", dest: "/etc/logstash/conf.d/", mode: 644}
     - {src: "{{logstash_srvname}}.j2", dest: "/etc/init.d/{{logstash_srvname}}", mode: 755}
     - {src: "default.j2", dest: "/etc/default/{{logstash_srvname}}", mode: 644}
-    - 
   sudo: yes
   sudo_user: root
   notify:
