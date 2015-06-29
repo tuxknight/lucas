@@ -9,7 +9,7 @@ privilege
 
 If you got some mechine that can only ssh to with a normal user, you may want to assign some directives::
 
-  - name: some action that need root priviledge
+  - name: some action that need root privilege
     copy: src='foo.conf' dest=/etc/ mode=644
     sudo: yes
     sudo_user: root

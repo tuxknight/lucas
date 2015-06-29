@@ -13,38 +13,46 @@
   with_items:
     - "/etc/logstash/conf.d"
     - "/var/lib/logstash"
+  tags: preinstall
 
 - name: unpack tarball to remote node
   unarchive: src="{{logstash_tarball}}" dest="{{base_home}}"
   ignore_errors: true
+  tags: unpack
 
 - name: check if unpack module worked
   stat: path="{{logstash_home}}"
   ignore_errors: true
   register: unpack_check
+  tags: unpack
 
 - fail: msg="unpack logstash failed!"
   when: unpack_check.stat.exists == false
+  tags: unpack
 
 - name: update ENV
   lineinfile:
     dest: "{{env_profile}}"
     line: "export PATH={{logstash_home}}/bin:$PATH"
     state: present
+  tags: preinstall
 
 - name: create conf directory
   file: path="/etc/logstash/conf.d/" state=directory
   ignore_errors: true
   sudo: yes
   sudo_user: root
+  tags: preinstall
 
 - name: check conf directory
   stat: path="/etc/logstash/conf.d/"
   register: dir_check
   ignore_errors: true
+  tags: preinstall
 
 - fail: msg="mkdir /etc/logstash/conf.d/ failed!"
   when: dir_check.stat.exists == false
+  tags: preinstall
 
 - name: create init-script and do the configuration stuff
   template: src={{item.src}} dest={{item.dest}} mode={{item.mode}}
@@ -52,8 +60,10 @@
     - {src: "logstash.conf.j2", dest: "/etc/logstash/conf.d/logstash.conf", mode: 644}
     - {src: "{{logstash_srvname}}.j2", dest: "/etc/init.d/{{logstash_srvname}}", mode: 755}
     - {src: "default.j2", dest: "/etc/default/{{logstash_srvname}}", mode: 644}
+    - {src: "logstash_rotate.j2", dest: "/etc/logrotate.d/{{logstash_srvname}}", mode: 644}
   sudo: yes
   sudo_user: root
   notify:
     - enable logstash
     - restart logstash
+  tags: setupsrv
