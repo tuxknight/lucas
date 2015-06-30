@@ -29,5 +29,4 @@ redis_key: "logstash-*"
 # or ["127.0.0.1:9300", "127.0.0.1"]
 els_addr: "127.0.0.1"
 
-conf_files:
-  - input.conf
+operation: "install"

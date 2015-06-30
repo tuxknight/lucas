@@ -4,7 +4,7 @@
   gather_facts: true
   roles: 
     - {role: common-env}
-    - {role: sun-jdk}
+#    - {role: sun-jdk}
 
 - name: setup redis
   hosts: redis

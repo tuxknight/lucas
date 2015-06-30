@@ -1,3 +1,6 @@
 1. kibana as a service
-2. test all over again
+2. config tasks
 3. add tags to tasks
+4. use fixed install dir name, for easy update package version
+   logstash installed  /home/lek/logstash-1.5.0 , but when update as logstash-1.5.1, it will fail
+5. ~/.profile may not exist

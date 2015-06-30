@@ -1,3 +1,6 @@
 ---
 # tasks file for logstash
 - include: "install_ls.yml"
+  when: operation == "install"
+- include: "config_ls.yml"
+  when: operation == "config"
