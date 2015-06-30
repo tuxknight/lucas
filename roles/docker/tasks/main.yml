@@ -1,0 +1,8 @@
+---
+# tasks file for docker
+- name: set version
+  debug: msg="need to update kernel"
+  when: ansible_os_family == "Debian" and ansible_lsb.major_release <= 14 
+
+- name: 
+  apt
