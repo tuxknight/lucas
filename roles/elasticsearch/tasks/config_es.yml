@@ -1,0 +1,7 @@
+---
+# config_es.yml
+- name:  update elasticsearch config file 
+  template: src=elasticsearch.yml.j2 dest="{{es_home}}/config" mode=644
+  notify:
+    - restart elasticsearch
+  tags: config_elasticsearch

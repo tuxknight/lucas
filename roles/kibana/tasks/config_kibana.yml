@@ -1,0 +1,8 @@
+---
+- name: remove default config/kibana.yml
+  file: path="{{kibana_home}}/config/{{kibana_config}}" state=absent
+  tags: config
+
+- name: update configuration file
+  template: src="{{kibana_config}}.j2" dest="{{kibana_home}}/config/{{kibana_config}}"
+  tags: config

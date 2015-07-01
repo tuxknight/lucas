@@ -1,27 +1,6 @@
 ---
 # tasks file for kibana
-- name: create directory
-  file: path="{{base_home}}" state=directory
-
-- name: unpack tarball to remote node
-  unarchive: src="{{kibana_tarball}}" dest="{{base_home}}"
-
-- name: check if unpack module worked
-  stat: path="{{kibana_home}}"
-  ignore_errors: true
-  register: unpack_check
-
-- fail: msg="unpack kibana failed!"
-  when: unpack_check.stat.exists == false
-
-- name: update ENV
-  lineinfile:
-    dest: "{{env_profile}}"
-    line: "export PATH={{kibana_home}}/bin:$PATH"
-    state: present
-
-- name: remove default config/kibana.yml
-  file: path="{{kibana_home}}/config/{{kibana_config}}" state=absent
-
-- name: update configuration file
-  template: src="{{kibana_config}}.j2" dest="{{kibana_home}}/config/{{kibana_config}}"
+- include: "install_kibana.yml"
+  when: operation == "install"
+- include: "config_kibana.yml"
+  when: operation == "config"
