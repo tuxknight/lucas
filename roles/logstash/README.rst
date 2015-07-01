@@ -45,6 +45,7 @@ Example Playbook
 ----------------
 
 ::
+
   - hosts: servers
     gather_facts: true
     roles:
