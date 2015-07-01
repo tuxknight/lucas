@@ -35,6 +35,7 @@
     dest: "{{env_profile}}"
     line: "export PATH={{logstash_home}}/bin:$PATH"
     state: present
+    create: yes
   tags: preinstall
 
 - name: create conf directory

@@ -21,6 +21,7 @@
     dest: "{{env_profile}}"
     line: "export PATH={{es_home}}/bin:$PATH"
     state: present
+    create: yes
 
 - name: remove default config/elasticsearch.yml
   file: path="{{es_home}}/config/{{item}}" state=absent

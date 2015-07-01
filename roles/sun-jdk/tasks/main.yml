@@ -24,6 +24,7 @@
     dest: "{{item[0]}}"
     line: "{{item[1]}}"
     state: present
+    create: yes
   with_nested:
     - ["/etc/profile", "{{ansible_env.HOME}}/.profile"]
     - ["export PATH={{java_home}}/bin:$PATH", "export JAVA_HOME={{java_home}}", "export CLASSPATH=.:{{java_home}}/lib"]

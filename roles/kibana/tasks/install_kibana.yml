@@ -21,6 +21,7 @@
     dest: "{{env_profile}}"
     line: "export PATH={{kibana_home}}/bin:$PATH"
     state: present
+    create: yes
 
 - name: remove default config/kibana.yml
   file: path="{{kibana_home}}/config/{{kibana_config}}" state=absent
