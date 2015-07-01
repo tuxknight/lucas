@@ -3,16 +3,38 @@
 - name: create directory
   file: path="{{base_home}}" state=directory
 
-- name: unpack tarball to remote node
-  unarchive: src="{{redis_tarball}}" dest="{{base_home}}"
-
-- name: check if unpack module worked
+- name: check redis_home
   stat: path="{{redis_home}}"
   ignore_errors: true
-  register: unpack_check
+  register: redishome_dir_check 
 
-- fail: msg="unpack redis failed!"
-  when: unpack_check.stat.exists == false
+# backup old version redis installation if exists
+- name: backup redis home
+#  command: mv {{redis_home}} {{redis_home}}_backuped_by_ansible
+  shell: tar czvf redis_backuped_by_ansible.{{ansible_date_time.epoch}}.tar.gz {{redis_home}} && rm -rf {{redis_home}}
+  when: redishome_dir_check.stat.exists == true
+
+# create a tmp dir for extracting redis tarball
+- name: create directory
+  file: path="{{base_home}}/.tmp_redis" state=directory
+  register: tmp_check
+
+# clean tmp dir when it's already exists
+- name: clean tmp dir
+  shell: rm -rf {{base_home}}/.tmp_redis/*
+  when: tmp_check.changed == False
+
+
+- name: unpack tarball to remote node
+  unarchive: src="{{redis_tarball}}" dest="{{base_home}}/.tmp_redis"
+
+#- name: check if unpack module worked
+#  stat: path="{{redis_home}}"
+#  ignore_errors: true
+#  register: unpack_check
+
+#- fail: msg="unpack redis failed!"
+#  when: unpack_check.stat.exists == false
 
 - name: update ENV
   lineinfile:
@@ -22,7 +44,7 @@
     create: yes
 
 - name: compile source code
-  shell: "cd {{redis_home}} && make && make PREFIX={{redis_home}} install"
+  shell: "cd {{base_home}}/.tmp_redis/* && make && make PREFIX={{redis_home}} install"
 
 - name: check if redis compilation succeed 
   stat: path="{{redis_home}}/bin/redis-server"

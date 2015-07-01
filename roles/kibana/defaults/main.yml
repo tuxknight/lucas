@@ -1,7 +1,7 @@
 ---
 # defaults file for kibana
 base_home: "{{ansible_env.HOME}}/lek"
-kibana_home: "{{base_home}}/kibana-4.1.0-linux-x64"
+kibana_home: "{{base_home}}/kibana"
 kibana_tarball: "kibana-4.1.0-linux-x64.tar.gz"
 env_profile: "{{ansible_env.HOME}}/.profile"
 kibana_config: "kibana.yml"
