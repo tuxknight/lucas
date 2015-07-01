@@ -2,19 +2,49 @@
 - name: create directory
   file: path="{{base_home}}" state=directory
 
-- name: unpack tarball to remote node
-  unarchive: src="{{kibana_tarball}}" dest="{{base_home}}"
-  tags: unpack
-
-- name: check if unpack module worked
+- name: check kibana_home
   stat: path="{{kibana_home}}"
   ignore_errors: true
-  register: unpack_check
+  register: kh_dir_check
+
+- name: backup old version kibana if exists
+#  command: mv {{kibana_home}} {{kibana_home}}_backuped_by_ansible
+  shell: tar czvf kibana_backuped_by_ansible.{{ansible_date_time.epoch}}.tar.gz {{kibana_home}} && rm -rf {{kibana_home}}
+  when: kh_dir_check.stat.exists == true
+
+# create a tmp dir for extracting kibana tarball
+- name: create directory
+  file: path="{{base_home}}/.tmp_kibana" state=directory
+  register: tmp_check
+
+# clean tmp dir when it's already exists
+- name: clean tmp dir
+  shell: rm -rf {{base_home}}/.tmp_kibana/*
+  when: tmp_check.changed == False
+
+# extract kibana to a tmp dir
+- name: unpack tarball to remote node
+  unarchive: src="{{kibana_tarball}}" dest="{{base_home}}/.tmp_kibana"
   tags: unpack
 
-- fail: msg="unpack kibana failed!"
-  when: unpack_check.stat.exists == false
-  tags: unpack
+# could not determine the directory name of kibana extracted
+#- name: check if unpack module worked
+#  stat: path="{{kibana_home}}"
+#  ignore_errors: true
+#  register: unpack_check
+#  tags: unpack
+#
+#- fail: msg="unpack kibana failed!"
+#  when: unpack_check.stat.exists == false
+#  tags: unpack
+
+# move kibana application from tmp dir to install target
+- name: install kibana to kibana home
+  shell: mv {{base_home}}/.tmp_kibana/* {{kibana_home}}
+
+# clean tmp dir
+- name: remove temp directory
+  file: path="{{base_home}}/.tmp_kibana" state=absent
 
 - name: update ENV
   lineinfile:

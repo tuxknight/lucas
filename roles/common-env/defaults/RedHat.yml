@@ -6,3 +6,5 @@ pkgmgr:
 packages:
     - gcc
     - glibc
+    - redhat-lsb
+    - redhat-lsb-core

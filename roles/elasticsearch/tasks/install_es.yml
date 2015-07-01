@@ -2,19 +2,51 @@
 - name: create directory
   file: path="{{base_home}}" state=directory
 
-- name: unpack tarball to remote node
-  unarchive: src="{{es_tarball}}" dest="{{base_home}}"
-  tags: unpack
-
-- name: check if unpack module worked
+# backup  es_home if exists
+- name: check elasticsearch_home
   stat: path="{{es_home}}"
   ignore_errors: true
-  register: unpack_check
+  register: eshome_dir_check
+
+# backup  es_home if exists
+- name: backup logstash home
+#command: mv {{es_home}} {{es_home}}_backuped_by_ansible
+  shell: tar czvf elasticsearch_backuped_by_ansible.{{ansible_date_time.epoch}}.tar.gz {{es_home}} && rm -rf {{es_home}}
+  when: eshome_dir_check.stat.exists == true
+
+# create a tmp dir for extracting elasticsearch tarball
+- name: create directory
+  file: path="{{base_home}}/.tmp_elasticsearch" state=directory
+  register: tmp_check
+
+# clean tmp dir when it's already exists
+- name: clean tmp dir
+  shell: rm -rf {{base_home}}/.tmp_elasticsearch/*
+  when: tmp_check.changed == False
+
+# extract elasticsearch tarball to a tmp dir
+- name: unpack tarball to remote node
+  unarchive: src="{{es_tarball}}" dest="{{base_home}}/.tmp_elasticsearch"
   tags: unpack
 
-- fail: msg="unpack elasticsearch failed!"
-  when: unpack_check.stat.exists == false
-  tags: unpack
+# could not determine the directory name of es tarball extracted
+#- name: check if unpack module worked
+#  stat: path="{{es_home}}"
+#  ignore_errors: true
+#  register: unpack_check
+#  tags: unpack
+#
+#- fail: msg="unpack elasticsearch failed!"
+#  when: unpack_check.stat.exists == false
+#  tags: unpack
+
+# move elasticsearch application from tmp dir to install target
+- name: install elasticsearch to elasticsearch_home
+  shell: mv {{base_home}}/.tmp_elasticsearch/* {{es_home}}
+
+# clean tmp dir
+- name: remove tmp directory
+  file: path="{{base_home}}/.tmp_elasticsearch" state=absent
 
 - name: update ENV
   lineinfile:
@@ -22,6 +54,8 @@
     line: "export PATH={{es_home}}/bin:$PATH"
     state: present
     create: yes
+
+
 
 - name: remove default config/elasticsearch.yml
   file: path="{{es_home}}/config/{{item}}" state=absent
