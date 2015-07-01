@@ -6,6 +6,27 @@
 - name: create directory
   file: path="{{base_home}}" state=directory
 
+- name: check logstash_home
+  stat: path="{{logstash_home}}"
+  ignore_errors: true
+  register: lshome_dir_check
+
+# backup old version logstash installation if exists
+- name: backup logstash home
+#  command: mv {{logstash_home}} {{logstash_home}}_backuped_by_ansible
+  shell: tar czvf logstash_backuped_by_ansible.{{ansible_date_time.epoch}}.tar.gz {{logstash_home}} && rm -rf {{logstash_home}}
+  when: lshome_dir_check.stat.exists == true
+
+# create a tmp dir for extracting logstash tarball
+- name: create directory
+  file: path="{{base_home}}/.tmp_logstash" state=directory
+  register: tmp_check
+
+# clean tmp dir when it's already exists
+- name: clean tmp dir
+  shell: rm -rf {{base_home}}/.tmp_logstash/*
+  when: tmp_check.changed == False
+
 - name: create directory
   file: path="{{item}}" state=directory
   sudo: yes
@@ -15,20 +36,30 @@
     - "/var/lib/logstash"
   tags: preinstall
 
+# extract logstash_tarball to a tmp dir
 - name: unpack tarball to remote node
-  unarchive: src="{{logstash_tarball}}" dest="{{base_home}}"
+  unarchive: src="{{logstash_tarball}}" dest="{{base_home}}/.tmp_logstash"
   ignore_errors: true
   tags: unpack
 
-- name: check if unpack module worked
-  stat: path="{{logstash_home}}"
-  ignore_errors: true
-  register: unpack_check
-  tags: unpack
+#  could not determine the directory name of logstash_tarball extracted
+#- name: check if unpack module worked
+#  stat: path="{{logstash_home}}"
+#  ignore_errors: true
+#  register: unpack_check
+#  tags: unpack
+#
+#- fail: msg="unpack logstash failed!"
+#  when: unpack_check.stat.exists == false
+#  tags: unpack
 
-- fail: msg="unpack logstash failed!"
-  when: unpack_check.stat.exists == false
-  tags: unpack
+# move logstash application from tmp dir to install target
+- name: install logstash to logstash_home
+  shell: mv {{base_home}}/.tmp_logstash/*  {{logstash_home}}
+
+# clean tmp dir
+- name: remove temp directory
+  file: path="{{base_home}}/.tmp_logstash" state=absent
 
 - name: update ENV
   lineinfile:

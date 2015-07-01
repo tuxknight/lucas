@@ -1,7 +1,7 @@
 ---
 # defaults file for redis
 base_home: "{{ansible_env.HOME}}/lek"
-redis_home: "{{base_home}}/redis-3.0.2"
+redis_home: "{{base_home}}/redis"
 redis_tarball: "redis-3.0.2.tar.gz"
 redis_config: "redis_{{redis_port}}.conf"
 redis_init: "redis_{{redis_port}}_init"

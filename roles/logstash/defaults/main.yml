@@ -3,7 +3,7 @@
 logstash_srvname: "logstash"
 base_home: "{{ansible_env.HOME}}/lek"
 logstash_tarball: "logstash-1.5.0.tar.gz"
-logstash_home: "{{base_home}}/logstash-1.5.0"
+logstash_home: "{{base_home}}/logstash"
 env_profile: "{{ansible_env.HOME}}/.profile"
 
 # must be a shipper or an indexer
