@@ -13,6 +13,6 @@
   sudo: yes
   sudo_user: root
 - name: enable kibana
-  service: name="kibana" state=enabled
+  service: name="kibana" enabled=true
   sudo: yes
   sudo_user: root

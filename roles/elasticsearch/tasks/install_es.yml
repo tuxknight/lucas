@@ -11,8 +11,13 @@
 # backup  es_home if exists
 - name: backup logstash home
 #command: mv {{es_home}} {{es_home}}_backuped_by_ansible
-  shell: tar czvf elasticsearch_backuped_by_ansible.{{ansible_date_time.epoch}}.tar.gz {{es_home}} && rm -rf {{es_home}}
+  shell: tar czvf elasticsearch_backuped_by_ansible.{{ansible_date_time.epoch}}.tar.gz {{es_home}}
   when: eshome_dir_check.stat.exists == true
+
+- name: delete old elasticsearch
+  file: path="{{es_home}}" state=absent
+  sudo: yes
+  sudo_user: root
 
 # create a tmp dir for extracting elasticsearch tarball
 - name: create directory

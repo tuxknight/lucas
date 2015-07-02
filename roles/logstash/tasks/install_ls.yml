@@ -14,8 +14,13 @@
 # backup old version logstash installation if exists
 - name: backup logstash home
 #  command: mv {{logstash_home}} {{logstash_home}}_backuped_by_ansible
-  shell: tar czvf logstash_backuped_by_ansible.{{ansible_date_time.epoch}}.tar.gz {{logstash_home}} && rm -rf {{logstash_home}}
+  shell: tar czvf logstash_backuped_by_ansible.{{ansible_date_time.epoch}}.tar.gz {{logstash_home}}
   when: lshome_dir_check.stat.exists == true
+
+- name: delete old logstash
+  file: path="{{logstash_home}}" state=absent
+  sudo: yes
+  sudo_user: root
 
 # create a tmp dir for extracting logstash tarball
 - name: create directory
@@ -32,8 +37,8 @@
   sudo: yes
   sudo_user: root
   with_items:
-    - "/etc/logstash/conf.d"
-    - "/var/lib/logstash"
+    - "/etc/{{logstash_srvname}}/conf.d"
+    - "/var/lib/{{logstash_srvname}}"
   tags: preinstall
 
 # extract logstash_tarball to a tmp dir
@@ -69,28 +74,28 @@
     create: yes
   tags: preinstall
 
-- name: create conf directory
-  file: path="/etc/logstash/conf.d/" state=directory
-  ignore_errors: true
-  sudo: yes
-  sudo_user: root
-  tags: preinstall
-
-- name: check conf directory
-  stat: path="/etc/logstash/conf.d/"
-  register: dir_check
-  ignore_errors: true
-  tags: preinstall
-
-- fail: msg="mkdir /etc/logstash/conf.d/ failed!"
-  when: dir_check.stat.exists == false
-  tags: preinstall
+#- name: create conf directory
+#  file: path="/etc/logstash/conf.d/" state=directory
+#  ignore_errors: true
+#  sudo: yes
+#  sudo_user: root
+#  tags: preinstall
+#
+#- name: check conf directory
+#  stat: path="/etc/logstash/conf.d/"
+#  register: dir_check
+#  ignore_errors: true
+#  tags: preinstall
+#
+#- fail: msg="mkdir /etc/logstash/conf.d/ failed!"
+#  when: dir_check.stat.exists == false
+#  tags: preinstall
 
 - name: create init-script and do the configuration stuff
   template: src={{item.src}} dest={{item.dest}} mode={{item.mode}}
   with_items:
-    - {src: "logstash.conf.j2", dest: "/etc/logstash/conf.d/logstash.conf", mode: 644}
-    - {src: "{{logstash_srvname}}.j2", dest: "/etc/init.d/{{logstash_srvname}}", mode: 755}
+    - {src: "logstash.conf.j2", dest: "/etc/{{logstash_srvname}}/conf.d/logstash_{{logstash_whoami}}.conf", mode: 644}
+    - {src: "logstash.j2", dest: "/etc/init.d/{{logstash_srvname}}", mode: 755}
     - {src: "default.j2", dest: "/etc/default/{{logstash_srvname}}", mode: 644}
     - {src: "logstash_rotate.j2", dest: "/etc/logrotate.d/{{logstash_srvname}}", mode: 644}
   sudo: yes

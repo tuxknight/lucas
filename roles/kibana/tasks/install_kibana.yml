@@ -12,6 +12,11 @@
   shell: tar czvf kibana_backuped_by_ansible.{{ansible_date_time.epoch}}.tar.gz {{kibana_home}} && rm -rf {{kibana_home}}
   when: kh_dir_check.stat.exists == true
 
+- name: delete old version kibana
+  file: path="{{kibana_home}}" state=absent
+  sudo: yes
+  sudo_user: root
+
 # create a tmp dir for extracting kibana tarball
 - name: create directory
   file: path="{{base_home}}/.tmp_kibana" state=directory
@@ -62,7 +67,7 @@
   tags: config
 
 - name: install kibana service
-  template: src="{{item.src}}" dest="{{item.dest}}" 
+  template: src="{{item.src}}" dest="{{item.dest}}" mode="{{item.mode}}"
   with_items:
     - {src: "kibana.j2", dest: "/etc/init.d/kibana", mode: 755}
     - {src: "kibana_rotate.j2", dest: "/etc/logrotate.d/kibana", mode: 644}
@@ -71,3 +76,4 @@
   notify:
     - enable kibana
     - restart kibana
+  tags: setup_srv
