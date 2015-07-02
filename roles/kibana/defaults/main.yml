@@ -4,6 +4,7 @@ base_home: "{{ansible_env.HOME}}/lek"
 kibana_home: "{{base_home}}/kibana"
 kibana_tarball: "kibana-4.1.0-linux-x64.tar.gz"
 env_profile: "{{ansible_env.HOME}}/.profile"
+kibana_srvname: "kibana"
 kibana_config: "kibana.yml"
 elasticsearch_url: "http://127.0.0.1:9200"
 kibana_port: 5601

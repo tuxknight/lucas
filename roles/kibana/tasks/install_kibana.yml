@@ -60,3 +60,14 @@
 - name: update configuration file
   template: src="{{kibana_config}}.j2" dest="{{kibana_home}}/config/{{kibana_config}}"
   tags: config
+
+- name: install kibana service
+  template: src="{{item.src}}" dest="{{item.dest}}" 
+  with_items:
+    - {src: "kibana.j2", dest: "/etc/init.d/kibana", mode: 755}
+    - {src: "kibana_rotate.j2", dest: "/etc/logrotate.d/kibana", mode: 644}
+  sudo: yes
+  sudo_user: root
+  notify:
+    - enable kibana
+    - restart kibana

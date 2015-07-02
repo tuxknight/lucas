@@ -4,9 +4,9 @@
   remote_user: root
   gather_facts: true
   roles: 
-    #- {role: common-env}
+    - {role: common-env}
     - {role: sun-jdk}
-    #- {role: redis, operation: "install" }
+    - {role: redis, operation: "install" }
     - {role: elasticsearch, operation: "install" }
-    #- {role: kibana, operation: "install" }
-    #- {role: logstash, operation: "install" }
+    - {role: kibana, operation: "install" }
+    - {role: logstash, operation: "install" }
