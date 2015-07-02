@@ -76,6 +76,7 @@
   with_items:
     - {src: "{{es_srvname}}.j2", dest: "/etc/init.d/{{es_srvname}}", mode: 755}
     - {src: "default.j2", dest: "/etc/default/{{es_srvname}}", mode: 644}
+    - {src: "elasticsearch_rotate.j2", dest: "/etc/logrotate.d/elasticsearch", mode: 644}
   sudo: yes
   sudo_user: root
   notify:

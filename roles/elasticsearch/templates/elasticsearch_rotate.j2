@@ -1,0 +1,10 @@
+#{{ansible_managed}}
+{{es_home}}/{{es_srvname}}.log {
+        daily
+        rotate 7
+        copytruncate
+        compress
+        delaycompress
+        missingok
+        notifempty
+}
