@@ -30,7 +30,7 @@ if [ `id -u` -ne 0 ]; then
 fi
 
 
-. /lib/lsb/init-functions
+#. /lib/lsb/init-functions
 
 if [ -r /etc/default/rcS ]; then
 	. /etc/default/rcS
@@ -79,18 +79,20 @@ MAX_OPEN_FILES=65535
 #MAX_LOCKED_MEMORY=
 
 # Elasticsearch log directory
-LOG_DIR=/var/log/
+#LOG_DIR=/var/log/
+LOG_DIR="{{es_home}}"
 
 # Elasticsearch data directory
 #DATA_DIR=/var/lib/$NAME
-DATA_DIR="{{es_home}}/data"
+#DATA_DIR="/home/elc/lek/elasticsearch/data"
+DATA_DIR="${ES_HOME}/data"
 
 # Elasticsearch work directory
 WORK_DIR=/tmp/$NAME
 
 # Elasticsearch configuration directory
 #CONF_DIR=/etc/$NAME
-CONF_DIR="{{es_home}}/config"
+CONF_DIR="${ES_HOME}/config"
 
 # Elasticsearch configuration file (elasticsearch.yml)
 CONF_FILE=$CONF_DIR/elasticsearch.yml
@@ -137,21 +139,39 @@ checkJava() {
 	fi
 }
 
+status() {
+  if [ -f $PID_FILE ] ; then
+    pid=`cat $PID_FILE`
+    if [ $pid ]; then
+      if kill -0 $pid >/dev/null 2>&1 ; then
+        return 0
+      else
+        return 1
+      fi
+    else
+        return 2
+    fi
+  else
+    return 3
+  fi
+}
+
+touch $PID_FILE
+
 case "$1" in
   start)
 	checkJava
 
 	if [ -n "$MAX_LOCKED_MEMORY" -a -z "$ES_HEAP_SIZE" ]; then
-		log_failure_msg "MAX_LOCKED_MEMORY is set - ES_HEAP_SIZE must also be set"
+		echo "MAX_LOCKED_MEMORY is set - ES_HEAP_SIZE must also be set"
 		exit 1
 	fi
 
-	log_daemon_msg "Starting $DESC"
+	echo "Starting $DESC"
 
-	pid=`pidofproc -p $PID_FILE elasticsearch`
+	pid=`cat $PID_FILE`
 	if [ -n "$pid" ] ; then
-		log_begin_msg "Already running."
-		log_end_msg 0
+		echo "Already running."
 		exit 0
 	fi
 
@@ -172,7 +192,8 @@ case "$1" in
 	fi
 
 	# Start Daemon
-	start-stop-daemon --start -b --user "$ES_USER" -c "$ES_USER" --pidfile "$PID_FILE" --exec $DAEMON -- $DAEMON_OPTS
+#	start-stop-daemon --start -b --user "$ES_USER" -c "$ES_USER" --pidfile "$PID_FILE" --exec $DAEMON -- $DAEMON_OPTS
+        su  - $ES_USER -c "$DAEMON $DAEMON_OPTS &" 
 	return=$?
 	if [ $return -eq 0 ]
 	then
@@ -183,34 +204,46 @@ case "$1" in
 		do
 			sleep 1
 			i=$(($i + 1))
-			[ $i -gt $timeout ] && log_end_msg 1
+			[ $i -gt $timeout ] && echo 'start timeout.' && break
 		done
+                if status ; then
+                   echo "started."
+                fi
 	else
-		log_end_msg $return
+		echo "someting goes wrong."
 	fi
 	;;		
   stop)
-	log_daemon_msg "Stopping $DESC"
+	echo "Stopping $DESC"
 
 	if [ -f "$PID_FILE" ]; then 
-		start-stop-daemon --stop --pidfile "$PID_FILE" \
-			--user "$ES_USER" \
-			--retry=TERM/20/KILL/5 >/dev/null
-		if [ $? -eq 1 ]; then
-			log_progress_msg "$DESC is not running but pid file exists, cleaning up"
-		elif [ $? -eq 3 ]; then
-			PID="`cat $PID_FILE`"
-			log_failure_msg "Failed to stop $DESC (pid $PID)"
-			exit 1
-		fi
-		rm -f "$PID_FILE"
-	else
-		log_progress_msg "(not running)"
-	fi
-	log_end_msg 0
+          if status ; then
+            pid=`cat $PID_FILE`
+            echo "kill $pid with SIGTERM"
+            kill -TERM $pid
+            for i in 1 2 3 4 5 ; do
+              echo "waiting for $pid to die..."
+              status && rm $PID_FILE && break 
+              sleep 1
+            done
+          fi
+        fi
+        if status ; then
+          echo "$pid stop failed, still running."
+        else
+          echo "$pid stopped."
+        fi
 	;;
   status)
-	status_of_proc -p $PID_FILE elasticsearch elasticsearch && exit 0 || exit $?
+	status
+        result=$?
+        if [ $result -eq 0 ] ; then
+          pid=`cat $PID_FILE`
+          echo "$pid is running"
+        else
+          echo "Stopped."
+        fi
+        exit $result
     ;;
   restart|force-reload)
 	if [ -f "$PID_FILE" ]; then
@@ -219,8 +252,15 @@ case "$1" in
 	fi
 	$0 start
 	;;
+  force-stop)
+    if status ; then
+      stop
+      status && kill -KILL `cat $PID_FILE`
+      echo "" >$PID_FILE
+    fi
+    ;;
   *)
-	log_success_msg "Usage: $0 {start|stop|restart|force-reload|status}"
+	echo "Usage: $0 {start|stop|restart|force-reload|force-stop|status}"
 	exit 1
 	;;
 esac

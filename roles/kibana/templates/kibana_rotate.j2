@@ -1,0 +1,10 @@
+#{{ansible_managed}}
+{{kibana_home}}/kibana.log {
+        daily
+        rotate 7
+        copytruncate
+        compress
+        delaycompress
+        missingok
+        notifempty
+}

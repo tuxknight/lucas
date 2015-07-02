@@ -1,0 +1,81 @@
+#!/bin/bash
+# {{ansible_managed}}
+### BEGIN INIT INFO
+# Provides:          kibana
+# Required-Start:    $network $syslog
+# Required-Stop:     $network $syslog
+# Should-Start:      $network $time
+# Should-Stop:       $network $time
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Start and stop kibana as a daemon
+# Description:       Controls kibana
+### END INIT INFO
+#
+set -e
+set -u
+
+PATH=/bin:/usr/bin:/sbin:/usr/sbin
+KIBANA_HOME="{{kibana_home}}"
+CONF="$KIBANA_HOME/config/kibana.yml"
+EXE="$KIBANA_HOME/bin/kibana"
+LOG="$KIBANA_HOME/kibana.log"
+KIBANA_USER={{ansible_env.USER}}
+
+OPTS=" -c $CONF -l $LOG"
+
+status() {
+  pid=`ps aux|grep kibana.js|grep node|grep -v grep|awk -F' ' '{print $2}'`
+  if [ "$pid" ] ; then
+    echo "started"
+    return 0
+  else
+    echo "stopped"
+   return 1
+  fi
+}
+
+start() {
+  if status ; then
+    echo "Already started."
+    exit 0
+  else
+    su - $KIBANA_USER -c "$EXE $OPTS &"
+  fi
+  status
+}
+stop() {
+  pid=`ps aux|grep kibana.js|grep node|grep -v grep|awk -F' ' '{print $2}'`
+  if [ "$pid" ] ; then
+    kill -9 $pid
+  fi 
+  echo "stopped" 
+}
+case "${1:-''}" in
+  'start')
+	start
+	;;
+
+  'stop')
+       stop
+	;;
+  'restart')
+       stop
+       start
+	;;
+
+  'reload'|'force-reload')
+        stop
+        start
+	;;
+
+  'status')
+        status
+  	;;
+
+  *)
+	echo "Usage: $SELF start|stop|restart|reload|force-reload|status"
+	exit 1
+	;;
+esac
+

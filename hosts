@@ -1,5 +1,5 @@
 [remote]
-10.32.105.213 ansible_ssh_user=elc
+10.32.105.153 ansible_ssh_user=elc ansible_sudo_pass=dangerous
 
 [lek:children]
 logstash

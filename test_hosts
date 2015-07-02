@@ -1,2 +1,2 @@
-[lek]
-192.168.10.101 ansible_ssh_user=root ansible_sudo_pass=12345678
+[test]
+10.32.105.153 ansible_ssh_user=elc ansible_sudo_pass=dangerous
