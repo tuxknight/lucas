@@ -1,0 +1,4 @@
+---
+# handlers file for nova-logging
+- name: restart rsyslog
+  service: name=rsyslog state=restarted

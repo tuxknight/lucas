@@ -31,3 +31,5 @@ indexer
 
 [test]
 192.168.10.101 ansible_ssh_user=root ansible_sudo_pass=12345678
+[nova-node]
+10.32.131.212 ansible_ssh_user=susu

@@ -1,0 +1,12 @@
+---
+# defaults file for nova-logging
+nova_conf: "/etc/nova/nova.conf"
+nova_facility: 
+  LOG_LOCAL0: local0
+log_server: "127.0.0.1:10514"
+protocol: "tcp"
+lines:
+  - {regx: "^verbose=", line: "verbose=False" }
+  - {regx: "^debug=", line: "debug=False" }
+  - {regx: "^use_syslog=", line: "use_syslog=True" }
+  - {regx: "^syslog_log_facility=", line: "syslog_log_facility=LOG_LOCAL0" }

@@ -1,0 +1,9 @@
+---
+- name: lek on docker
+  hosts: nova-node
+  gather_facts: true
+
+  roles:
+      #- {role: nova-logging, nova_facility: "LOG_LOCAL0" ,log_server: "10.32.105.153:10514" }
+      - {role: common-env }
+      - {role: nova-logging, log_server: "10.32.105.153:10514"} 

@@ -8,3 +8,4 @@ packages:
     - glibc
     - redhat-lsb
     - redhat-lsb-core
+    - rsyslog
