@@ -2,3 +2,9 @@
 # handlers file for nova-logging
 - name: restart rsyslog
   service: name=rsyslog state=restarted
+  sudo: yes
+  sudo_user: root
+- name: restart nova-compute
+  service: name=nova-compute state=restarted
+  sudo: yes
+  sudo_user: root

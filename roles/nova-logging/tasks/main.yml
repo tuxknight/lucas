@@ -20,3 +20,8 @@
     state: present
   with_items:
     "{{lines}}"
+  sudo: yes
+  sudo_user: root
+  notify:
+    - restart nova-compute
+
