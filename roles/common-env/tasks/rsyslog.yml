@@ -6,4 +6,4 @@
     packages
 
 - name: keep rsyslogd running
-  service: name=rsyslog state=started
+  service: name=rsyslog state=started enabled=yes

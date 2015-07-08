@@ -1,0 +1,22 @@
+---
+# handlers file for cinder-logging
+- name: restart rsyslog
+  service: name=rsyslog state=restarted
+  sudo: yes
+  sudo_user: root
+- name: restart cinder-api
+  service: name=cinder-api state=restarted
+  sudo: yes
+  sudo_user: root
+- name: restart cinder-backup
+  service: name=cinder-backup state=restarted
+  sudo: yes
+  sudo_user: root
+- name: restart cinder-volume
+  service: name=cinder-volume state=restarted
+  sudo: yes
+  sudo_user: root
+- name: restart cinder-scheduler
+  service: name=cinder-scheduler state=restarted
+  sudo: yes
+  sudo_user: root

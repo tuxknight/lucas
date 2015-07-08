@@ -3,7 +3,9 @@
 nova_conf: "/etc/nova/nova.conf"
 nova_facility: 
   LOG_LOCAL0: local0
-log_server: "127.0.0.1:10514"
+host: "127.0.0.1"
+port: "10514"
+log_server: "{{host}}:{{port}}"
 protocol: "tcp"
 lines:
   - {regx: "^verbose=", line: "verbose=False" }

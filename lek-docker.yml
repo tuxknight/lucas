@@ -1,9 +1,12 @@
 ---
 - name: lek on docker
-  hosts: nova-node
+  hosts: os-logging
   gather_facts: true
+  vars:
+    - host: "10.32.105.153"
 
   roles:
-      #- {role: nova-logging, nova_facility: "LOG_LOCAL0" ,log_server: "10.32.105.153:10514" }
       - {role: common-env }
-      - {role: nova-logging, log_server: "10.32.105.153:10514"} 
+      - {role: nova-logging, host: "{{host}}", port: "10514" }
+      - {role: cinder-logging, host: "{{host}}", port: "11514" }
+      - {role: neutron-logging, host: "{{host}}", port: "12514" }

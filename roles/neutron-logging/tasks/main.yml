@@ -1,0 +1,26 @@
+---
+# tasks file for neutron-logging
+- name: configure rsyslog
+  lineinfile: 
+    dest: "/etc/rsyslog.conf" 
+    line: "{{item.value}}.* @@{{log_server}}"
+    state: present
+  with_dict:
+    "{{neutron_facility}}"
+  sudo: yes
+  sudo_user: root
+  notify:
+    - restart rsyslog
+
+- name: configure neutron.conf
+  lineinfile:
+    dest: "{{neutron_conf}}"
+    regexp: "{{item.regx}}"
+    line: "{{item.line}}"
+    state: present
+  with_items:
+    "{{lines}}"
+  sudo: yes
+  sudo_user: root
+  notify:
+    - reload neutron-server

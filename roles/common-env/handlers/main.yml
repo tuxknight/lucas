@@ -1,2 +1,22 @@
 ---
 # handlers file for common-env
+- name: restart rsyslog
+  service: name=rsyslog state=restarted
+  sudo: yes
+  sudo_user: root
+- name: enable rsyslog
+  service: name=rsyslog state=started enabled=yes
+  sudo: yes
+  sudo_user: root
+- name: stop rsyslog
+  service: name=rsyslog state=stopped
+  sudo: yes
+  sudo_user: root
+- name: start rsyslog
+  service: name=rsyslog state=started
+  sudo: yes
+  sudo_user: root
+- name: reload rsyslog
+  service: name=rsyslog state=reloaded
+  sudo: yes
+  sudo_user: root

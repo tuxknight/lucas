@@ -6,3 +6,4 @@ pkgmgr:
 packages:
     - gcc
     - glibc
+    - rsyslog

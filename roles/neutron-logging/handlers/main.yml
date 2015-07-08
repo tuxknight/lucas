@@ -1,0 +1,6 @@
+---
+# handlers file for neutron-logging
+- name: restart neutron-server
+  service: name=neutron-server state=restarted
+  sudo: yes
+  sudo_user: root
