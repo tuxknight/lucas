@@ -2,8 +2,35 @@
 - include_vars: "{{ ansible_os_family }}.yml"
 - name: make sure rsyslog was installed
   action: "{{pkgmgr.pkg}} {{pkgmgr.name}}={{item}} {{pkgmgr.state}}=present"
+  sudo: yes
+  sudo_user: root
   with_items:
     packages
 
+# change rsyslog format
+- name: change some default settings - 1
+  lineinfile:
+    dest: "/etc/rsyslog.conf"
+    line: "$ActionFileDefaultTemplate RSYSLOG_TraditionalFileFormat"
+    state: absent
+  sudo: yes
+  sudo_user: root
+  notify:
+      - restart rsyslog
+
+- name: change some default settings
+  lineinfile:
+    dest: "/etc/rsyslog.conf"
+    line: "{{item}}"
+    state: present
+  sudo: yes
+  sudo_user: root
+  with_items:
+      - "$ActionFileDefaultTemplate RSYSLOG_FileFormat"
+      - "$ActionForwardDefaultTemplate RSYSLOG_ForwardFormat"
+  notify:
+      - restart rsyslog
 - name: keep rsyslogd running
-  service: name=rsyslog state=started enabled=yes
+  service: name=rsyslog state=restarted enabled=yes
+  sudo: yes
+  sudo_user: root

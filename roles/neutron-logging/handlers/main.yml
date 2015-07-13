@@ -4,3 +4,7 @@
   service: name=neutron-server state=restarted
   sudo: yes
   sudo_user: root
+- name: reload neutron-server
+  service: name=neutron-server state=reloaded
+  sudo: yes
+  sudo_user: root

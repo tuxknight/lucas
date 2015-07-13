@@ -1,5 +1,6 @@
 ---
 # tasks file for neutron-logging
+# add redirection rules 
 - name: configure rsyslog
   lineinfile: 
     dest: "/etc/rsyslog.conf" 
@@ -12,12 +13,14 @@
   notify:
     - restart rsyslog
 
+# enable use_syslog in neutron.conf
 - name: configure neutron.conf
   lineinfile:
     dest: "{{neutron_conf}}"
     regexp: "{{item.regx}}"
     line: "{{item.line}}"
     state: present
+    insertafter: "\\[DEFAULT\\]"
   with_items:
     "{{lines}}"
   sudo: yes

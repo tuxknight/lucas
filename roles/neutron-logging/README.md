@@ -1,38 +1,48 @@
 Role Name
-=========
+============
 
-A brief description of the role goes here.
+.. contents:: Topics
+
+Send logging information to syslog
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+Ansible-core-module: ``lineinfile``
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+Default vars:
+  neutron_conf: "/etc/neutron/neutron.conf"
+  neutron_facility:
+    LOG_LOCAL2: local2
+  port: "10514"
+  host: "127.0.0.1"
+  log_server: "{{host}}:{{port}}"
+  protocal: "tcp"
+  lines:
+    - {regx: "^verbose=", line: "verbose=False" }
+    - {regx: "^debug=", line: "debug=False" }
+    - {regx: "^use_syslog=", line: "use_syslog=True" }
+    - {regx: "^syslog_log_facility=", line: "syslog_log_facility=LOG_LOCAL2" }
 
 Dependencies
 ------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+None
 
 Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
+::
 
     - hosts: servers
       roles:
-         - { role: username.rolename, x: 42 }
+         - { role: neutron-logging, host: "10.32.10.153" }
 
 License
 -------
 
 BSD
 
-Author Information
-------------------
-
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).

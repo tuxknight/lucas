@@ -1,5 +1,5 @@
 ---
 #- include: authorized-keys.yml
 - include: disable-requretty.yml  
-#- include: compiler.yml
-- include: rsyslog.yml
+- include: compiler.yml
+#- include: rsyslog.yml

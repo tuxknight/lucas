@@ -1,5 +1,6 @@
 ---
 # tasks file for nova-logging
+# add redirection rules 
 - name: configure rsyslog
   lineinfile: 
     dest: "/etc/rsyslog.conf" 
@@ -12,11 +13,13 @@
   notify:
     - restart rsyslog
 
+# enable use_syslog in nova.conf
 - name: configure nova.conf
   lineinfile:
     dest: "{{nova_conf}}"
     regexp: "{{item.regx}}"
     line: "{{item.line}}"
+    insertafter: "\\[DEFAULT\\]"
     state: present
   with_items:
     "{{lines}}"
@@ -24,4 +27,3 @@
   sudo_user: root
   notify:
     - restart nova-compute
-

@@ -6,7 +6,7 @@
     - host: "10.32.105.153"
 
   roles:
-      - {role: common-env }
-      - {role: nova-logging, host: "{{host}}", port: "10514" }
-      - {role: cinder-logging, host: "{{host}}", port: "11514" }
-      - {role: neutron-logging, host: "{{host}}", port: "12514" }
+    - {role: common-env }
+    - {role: nova-logging, host: "{{host}}", port: "10514" }
+    - {role: cinder-logging, host: "{{host}}", port: "11514" }
+    - {role: neutron-logging, host: "{{host}}", port: "12514" }

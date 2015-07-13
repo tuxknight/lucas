@@ -1,0 +1,13 @@
+---
+- hosts: remote
+  gather_facts: true
+  remote_user: root
+
+  tasks:
+      #    - name: restart rsyslog
+      #      command: "service rsyslog restart"
+   - name: restart rsyslog
+     service: name=nginx state=restarted
+     #command: "service rsyslog restart"
+     sudo: yes
+     sudo_user: root
