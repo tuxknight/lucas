@@ -1,0 +1,21 @@
+---
+# tasks file for go
+- name: create directory
+  command: mkdir -p "{{GO_HOME}}"
+
+- name: unpack go
+  unarchive: src="{{go_tarball}}" dest="{{GO_HOME}}"
+  ignore_errors: true
+  register: untar
+  tags: unpack
+
+- name: update ENV
+  lineinfile:
+    dest: "{{PROFILE}}"
+    line: "{{item}}"
+    state: present
+    create: yes
+  with_items:
+    - "export PATH={{GO_HOME}}/bin:$PATH"
+    - "export GOROOT={{GO_HOME}}"
+

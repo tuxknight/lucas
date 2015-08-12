@@ -1,0 +1,5 @@
+---
+# defaults file for go
+go_tarball: "go1.4.2.linux-amd64.tar.gz"
+GO_HOME: "{{ansible_env.HOME}}/bin/go"
+PROFILE: "{{ansible_env.HOME}}/.profile"

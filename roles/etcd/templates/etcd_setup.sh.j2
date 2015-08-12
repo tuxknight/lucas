@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+# {{ansible_managed}}
+nohup {{exec}} -name etcd_{{ansible_hostname}} -initial-advertise-peer-urls {{peer_urls}} -data-dir {{data_dir}} -listen-peer-urls {{peer_urls}} -listen-client-urls {{client_urls}} -advertise-client-urls {{client_urls}} -initial-cluster-token {{cluster_token}} -initial-cluster {%for host in groups[group]%}etcd_{{hostvars[host]['ansible_hostname']}}=http://{{hostvars[host]['ansible_default_ipv4']['address']}}:{{peer_port}},{%endfor%} -initial-cluster-state {{state}} &

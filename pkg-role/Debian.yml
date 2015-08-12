@@ -1,7 +1,0 @@
----
-pkgmgr:
-  pkg: apt
-  name: pkg
-  state: state
-package:
-  - vim

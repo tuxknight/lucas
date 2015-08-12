@@ -8,7 +8,7 @@
     packages
 
 # change rsyslog format
-- name: change some default settings - 1
+- name: change some default settings
   lineinfile:
     dest: "/etc/rsyslog.conf"
     line: "$ActionFileDefaultTemplate RSYSLOG_TraditionalFileFormat"

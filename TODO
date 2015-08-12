@@ -1,5 +1,0 @@
-1. kibana as a service
-2. config tasks
-3. elasticsearch custom init-script, do not use start-stop-deamon and lsb-functions
-
-elasticsearch --> jdk 1.8 required

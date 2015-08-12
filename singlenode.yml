@@ -8,5 +8,5 @@
     - { role: redis }
     - { role: elasticsearch}
     - { role: kibana }
-    #- { role: logstash , logstash_whoami: "shipper" , logstash_srvname: "logstash_shipper"}
+    - { role: logstash , logstash_whoami: "shipper" , logstash_srvname: "logstash_shipper"}
     - { role: logstash , logstash_whoami: "indexer" , logstash_srvname: "logstash_indexer"}

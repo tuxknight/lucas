@@ -1,0 +1,23 @@
+---
+# tasks file for etcd
+
+- name: create directory if not exists
+  file: path="{{ansible_env.HOME}}/bin" state="directory"
+
+- name: remove old data-dir
+  file: path="{{data_dir}}" state=absent
+
+- name: copy etcd binaries
+  copy: src="{{item}}" dest="{{ansible_env.HOME}}/bin/{{item}}" mode="0755"
+  with_items:
+    - etcd
+    - etcdctl
+
+- name: template setup script
+  template: src=etcd_setup.sh.j2 dest="{{ansible_env.HOME}}/bin/etcd_setup.sh" mode="0755"
+
+#- name: setup etcd cluster
+#  script: "nohup {{exec}} -name etcd_{{ansible_hostname}} -initial-advertise-peer-urls {{peer_urls}} -data-dir {{data_dir}} -listen-peer-urls {{peer_urls}} -listen-client-urls {{client_urls}} -advertise-client-urls {{client_urls}} -initial-cluster-token {{cluster_token}} -initial-cluster etcd_{{hostvars[groups['etcd-cluster'][0]]['ansible_hostname']}}=http://{{hostvars[groups['etcd-cluster'][0]]['ansible_default_ipv4']['address']}}:{{peer_port}},etcd_{{hostvars[groups['etcd-cluster'][1]]['ansible_hostname']}}=http://{{hostvars[groups['etcd-cluster'][1]]['ansible_default_ipv4']['address']}}:{{peer_port}},etcd_{{hostvars[groups['etcd-cluster'][2]]['ansible_hostname']}}=http://{{hostvars[groups['etcd-cluster'][2]]['ansible_default_ipv4']['address']}}:{{peer_port}} -initial-cluster-state {{state}} &"
+
+- name: setup etcd cluster
+  shell: "nohup {{ansible_env.HOME}}/bin/etcd_setup.sh &"

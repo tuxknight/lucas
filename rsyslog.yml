@@ -7,7 +7,7 @@
       #    - name: restart rsyslog
       #      command: "service rsyslog restart"
    - name: restart rsyslog
-     service: name=nginx state=restarted
+     service: name=rsyslog state=restarted
      #command: "service rsyslog restart"
      sudo: yes
      sudo_user: root

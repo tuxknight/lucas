@@ -1,0 +1,3 @@
+---
+ansible_ssh_user: elc
+ansible_sudo_pass: dangerous

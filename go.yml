@@ -1,0 +1,5 @@
+- name: install go complier
+  hosts: etcd-cluster
+  
+  roles:
+    - go
