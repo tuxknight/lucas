@@ -1,0 +1,7 @@
+---
+- hosts: etcd-cluster
+  gather_facts: true
+
+  tasks:
+    - name: "group name"
+      debug: msg="{{groups}}"
